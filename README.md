@@ -161,6 +161,7 @@ Access services remotely:
 <img width="2555" height="1313" alt="Screenshot 2026-03-26 173501" src="https://github.com/user-attachments/assets/14ca1378-dddd-4e66-a317-066a60a351a3" />
 * Tachimanga mobile access
 <img width="827" height="1792" alt="IMG_8332" src="https://github.com/user-attachments/assets/c5513795-3195-44df-bf9e-4e12cc030770" />
+
 * Nextcloud dashboard
 <img width="2558" height="1307" alt="Screenshot 2026-03-26 180041" src="https://github.com/user-attachments/assets/93b0810a-0e99-407d-8f7b-9bf3e7d83247" />
 * Docker containers running
