@@ -1,16 +1,11 @@
-# 🚀 NasPi — Self-Hosted Manga + Cloud Server on Raspberry Pi
+🚀 NasPi — Self-Hosted Manga + Cloud Server on Raspberry Pi
+🔹 Overview
 
-## 🔹 Overview
+NasPi is a self-hosted media and cloud server built on a Raspberry Pi 4 using Docker. It combines Komga for manga management, Nextcloud for file storage, and Tailscale for secure remote access across devices.
 
-**NasPi** is a self-hosted media and cloud server built on a Raspberry Pi 4 using Docker. It combines Komga for manga management, Nextcloud for file storage, and Tailscale for secure remote access.
+This project demonstrates hands-on experience with Linux system administration, containerization, networking, and storage management in a real-world homelab environment.
 
-This project demonstrates hands-on experience with Linux systems, containerization, networking, and storage management in a real-world homelab environment.
-
----
-
-## 🧠 Architecture
-
-```text
+🧠 Architecture
 Phone / Laptop
      ↓
  Tailscale VPN
@@ -19,68 +14,37 @@ Raspberry Pi 4 (NasPi)
  ├── Komga (Manga Server)
  ├── Nextcloud (Cloud Storage)
  └── External SSD (NAS Storage)
-```
-
----
-
-## ⚙️ Tech Stack
-
-* **Hardware:** Raspberry Pi 4 (4GB RAM)
-* **OS:** Raspberry Pi OS Lite (64-bit)
-* **Containerization:** Docker & Docker Compose
-* **Applications:**
-
-  * Komga (self-hosted manga server)
-  * Nextcloud (self-hosted cloud platform)
-* **Networking:** Tailscale (VPN for secure remote access)
-* **Storage:** External SSD mounted at `/mnt/storage`
-* **File Sharing:** Samba (optional)
-
----
-
-## 🚀 Features
-
-* 📚 Self-hosted manga library accessible via web and mobile (Tachimanga)
-* ☁️ Private cloud storage with Nextcloud
-* 🔒 Secure remote access using Tailscale VPN (no port forwarding required)
-* 📱 Cross-device access (phone, laptop, tablet)
-* 🧱 Organized and scalable storage structure
-* ⚡ Lightweight and efficient setup on low-power hardware
-
----
-
-## 🛠️ Setup Process
-
-### 1. System Preparation
-
-* Installed Raspberry Pi OS Lite (64-bit)
-* Enabled SSH for headless setup
-* Updated system packages
-
----
-
-### 2. Storage Configuration
+⚙️ Tech Stack
+Hardware: Raspberry Pi 4 (4GB RAM)
+OS: Raspberry Pi OS Lite (64-bit)
+Containerization: Docker & Docker Compose
+Applications:
+Komga (self-hosted manga server)
+Nextcloud (self-hosted cloud platform)
+Networking: Tailscale (secure VPN access)
+Storage: External SSD mounted at /mnt/storage
+File Sharing: Samba (Windows file sharing)
+🚀 Features
+📚 Self-hosted manga server accessible via web and mobile apps (Tachimanga)
+☁️ Private cloud storage with Nextcloud
+🔒 Secure remote access using Tailscale (no port forwarding required)
+📱 Cross-device access (phone, laptop, tablet)
+📂 File upload and synchronization via Nextcloud
+🧱 Organized storage system for scalability
+🛠️ Setup Process
+1. System Preparation
+Installed Raspberry Pi OS Lite (64-bit)
+Enabled SSH for headless setup
+Updated system packages
+2. Storage Configuration
 
 Mounted external SSD:
 
-```bash
 /mnt/storage
-```
-
----
-
-### 3. Install Docker
-
-```bash
+3. Install Docker
 curl -fsSL https://get.docker.com | sh
 sudo usermod -aG docker $USER
-```
-
----
-
-### 4. Deploy Services with Docker Compose
-
-```yaml
+4. Deploy Services with Docker Compose
 services:
   komga:
     image: gotson/komga
@@ -100,33 +64,26 @@ services:
     volumes:
       - /mnt/storage/nextcloud:/var/www/html
     restart: unless-stopped
-```
 
 Start services:
 
-```bash
 docker compose up -d
-```
-
----
-
-### 5. Secure Remote Access (Tailscale)
-
-```bash
+5. Configure Remote Access (Tailscale)
 curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
-```
 
 Access services remotely:
 
-* Komga → `http://<tailscale-ip>:25600`
-* Nextcloud → `http://<tailscale-ip>:8080`
+Komga → http://<tailscale-ip>:25600
+Nextcloud → http://<tailscale-ip>:8080
+6. Fix Nextcloud Trusted Domains
 
----
+To allow access via local and Tailscale IPs:
 
-## 📁 File Structure
-
-```bash
+docker exec -u www-data nextcloud php occ config:system:set trusted_domains 1 --value=<local-ip>
+docker exec -u www-data nextcloud php occ config:system:set trusted_domains 2 --value=<tailscale-ip>
+docker restart nextcloud
+📁 File Structure
 /mnt/storage/
   ├── komga/
   │     └── Manga/
@@ -134,23 +91,19 @@ Access services remotely:
   │                 └── Volume.cbz
   ├── nextcloud/
   └── docker/
-```
-
----
-
-## ⚠️ Challenges & Solutions
-
-* **PDF compatibility issues in Tachimanga**
-  → Converted files to `.cbz` format for proper rendering
-
-* **Docker daemon not running**
-  → Reinstalled Docker and enabled the service
-
-* **File permission errors**
-  → Fixed ownership using `chown`
-
-* **Remote access limitations**
-  → Implemented Tailscale VPN for secure connectivity
+📱 Mobile Integration
+Integrated Komga with Tachimanga for mobile reading
+Enabled remote access via Tailscale VPN
+Optimized media format to .cbz for compatibility
+⚠️ Challenges & Solutions
+PDF compatibility issues in Tachimanga
+→ Converted files to .cbz format
+Docker daemon not running
+→ Reinstalled Docker and enabled service
+Permission issues with mounted storage
+→ Fixed using chown
+Nextcloud "untrusted domain" error
+→ Added IPs to trusted domains using occ
 
 ---
 
